@@ -208,7 +208,7 @@ function renderContentList() {
     hotFiltered.forEach(item => hotList.appendChild(createContentCard(item)));
 }
 
-// 创建内容卡片
+// 创建内容卡片（修复了标签错误！）
 function createContentCard(item) {
     const card = document.createElement("div");
     card.className = "mdui-card mdui-m-b-2";
@@ -225,13 +225,13 @@ function createContentCard(item) {
         </div>
         <div class="mdui-card-actions">
             <button class="mdui-btn mdui-btn-icon" onclick="likeContent(${item.id})">
-                <<i class="mdui-icon material-icons">thumb_up</</i> ${item.likes}
+                <i class="mdui-icon material-icons">thumb_up</i> ${item.likes}
             </button>
             <button class="mdui-btn mdui-btn-icon" onclick="showComment(${item.id})">
-                <<i class="mdui-icon material-icons">comment</</i> 评论
+                <i class="mdui-icon material-icons">comment</i> 评论
             </button>
             <button class="mdui-btn mdui-btn-icon" onclick="addFriend(${item.id})">
-                <<i class="mdui-icon material-icons">person_add</</i> 加好友
+                <i class="mdui-icon material-icons">person_add</i> 加好友
             </button>
         </div>
     `;
