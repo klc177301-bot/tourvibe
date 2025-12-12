@@ -29,10 +29,10 @@ function updateTime() {
 }
 setInterval(updateTime, 1000);
 
-// 天气查询（已替换你的高德API Key）
+// 天气查询（用Web服务的Key）
 async function getWeather(cityCode) {
     try {
-        const res = await axios.get(`https://restapi.amap.com/v3/weather/weatherInfo?key=389e289d3e4bebdddeda7afad265dd0c&city=${cityCode}`);
+        const res = await axios.get(`https://restapi.amap.com/v3/weather/weatherInfo?key=93e0d97b7874047829e95e72dfcbee7&city=${cityCode}`);
         const weather = res.data.lives[0];
         document.getElementById("weatherInfo").textContent = `${weather.weather} ${weather.temperature}℃`;
     } catch (e) { 
@@ -47,7 +47,7 @@ window.onload = function() {
     renderContentList();
     loadScenicData(currentScenic);
     updateTime();
-    getWeather(scenicBaseData[currentScenic].cityCode);
+    getWeather(scenicBaseData[currentScenic].cityCode); // 加载当前景区天气
 };
 
 // 初始化地图
@@ -64,7 +64,7 @@ function switchScenic(scenicName) {
     currentScenic = scenicName;
     map.setCenter(scenicBaseData[currentScenic].center);
     loadScenicData(scenicName);
-    getWeather(scenicBaseData[scenicName].cityCode);
+    getWeather(scenicBaseData[scenicName].cityCode); // 切换景区后更新天气
     renderContentList();
 }
 
@@ -225,13 +225,13 @@ function createContentCard(item) {
         </div>
         <div class="mdui-card-actions">
             <button class="mdui-btn mdui-btn-icon" onclick="likeContent(${item.id})">
-                <i class="mdui-icon material-icons">thumb_up</i> ${item.likes}
+                <<i class="mdui-icon material-icons">thumb_up</</i> ${item.likes}
             </button>
             <button class="mdui-btn mdui-btn-icon" onclick="showComment(${item.id})">
-                <i class="mdui-icon material-icons">comment</i> 评论
+                <<i class="mdui-icon material-icons">comment</</i> 评论
             </button>
             <button class="mdui-btn mdui-btn-icon" onclick="addFriend(${item.id})">
-                <i class="mdui-icon material-icons">person_add</i> 加好友
+                <<i class="mdui-icon material-icons">person_add</</i> 加好友
             </button>
         </div>
     `;
