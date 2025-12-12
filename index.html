@@ -1,1 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄山+香山景区社交圈</title>
+    <!-- 引入高德地图JS API -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=你的高德API Key"></script>
+    <!-- 引入开源UI组件（替代Vant，原生兼容） -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/mdui/1.0.2/css/mdui.min.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/mdui/1.0.2/js/mdui.min.js"></script>
+    <!-- 引入自定义样式 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="mdui-appbar mdui-color-primary">
+        <div class="mdui-toolbar mdui-container">
+            <span class="mdui-typo-title">景区社交圈</span>
+            <div class="mdui-toolbar-spacer"></div>
+            <!-- 景区切换下拉框 -->
+            <select id="scenicSelect" class="mdui-select" onchange="switchScenic(this.value)">
+                <option value="黄山" selected>黄山</option>
+                <option value="香山">香山</option>
+            </select>
+            <button class="mdui-btn mdui-btn-raised mdui-btn-dense mdui-color-accent" onclick="showPublishModal()">发布</button>
+        </div>
+    </header>
 
+    <!-- 地图容器 -->
+    <div id="mapContainer" class="mdui-container-fluid" style="height: 300px; margin-top: 64px;"></div>
+
+    <!-- 内容标签页 -->
+    <div class="mdui-container" style="margin-top: 20px;">
+        <div class="mdui-tabs mdui-tabs-fixed-tabs" mdui-tab>
+            <a href="#near" class="mdui-tab-item mdui-active">附近内容</a>
+            <a href="#hot" class="mdui-tab-item">热门内容</a>
+            <a href="#scenicData" class="mdui-tab-item">景区地理数据</a>
+        </div>
+        <div class="mdui-tabs-content">
+            <!-- 附近内容 -->
+            <div id="near" class="mdui-tabs-pane mdui-active" id="contentList">
+                <!-- 内容会通过JS动态生成 -->
+            </div>
+            <!-- 热门内容（和附近内容共用数据） -->
+            <div id="hot" class="mdui-tabs-pane">
+                <div id="hotContentList"></div>
+            </div>
+            <!-- 景区地理数据 -->
+            <div id="scenicData" class="mdui-tabs-pane">
+                <div id="landformInfo" class="mdui-card mdui-p-a-2"></div>
+                <div id="poiList" class="mdui-list mdui-m-t-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 发布内容的弹窗 -->
+    <div class="mdui-dialog" id="publishModal">
+        <div class="mdui-dialog-title">发布风景照片</div>
+        <div class="mdui-dialog-content">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">内容描述</label>
+                <input type="text" class="mdui-textfield-input" id="publishContent" placeholder="分享你的风景吧~">
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">拍摄位置</label>
+                <input type="text" class="mdui-textfield-input" id="publishLocation" placeholder="如：黄山-云海观景台">
+            </div>
+            <div class="mdui-m-t-2">
+                <label class="mdui-btn mdui-btn-raised mdui-btn-outlined">
+                    选择照片 <input type="file" id="photoUpload" accept="image/*" onchange="previewPhoto(this)">
+                </label>
+                <img id="photoPreview" style="max-width: 100%; max-height: 200px; display: none;" alt="照片预览">
+            </div>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn" onclick="closePublishModal()">取消</button>
+            <button class="mdui-btn mdui-color-primary" onclick="publishContent()">发布</button>
+        </div>
+    </div>
+
+    <!-- 引入自定义脚本 -->
+    <script src="script.js"></script>
+</body>
+</html>
