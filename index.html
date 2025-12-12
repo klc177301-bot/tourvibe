@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TourVibe - 模拟景区展示</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #a3d2ff; transition: background 1s; overflow-x: hidden; }
+  header { background: #0174DF; color: white; padding: 1em; text-align: center; }
+  #map { position: relative; width: 100%; height: 300px; background: #cceeff; overflow: hidden; }
+  .spot { position: absolute; width: 40px; height: 40px; border-radius: 50%; background: red; cursor: pointer; display:flex;align-items:center;justify-content:center;color:white;font-weight:bold; }
+  #info { padding: 1em; }
+  #social { padding: 1em; background: #f0f0f0; }
+  #comments { margin-top: 1em; }
+  .comment { border-bottom: 1px solid #ccc; padding: 0.5em 0; }
+  #weather-controls button { margin-right: 0.5em; }
+
+  /* 云朵 */
+  .cloud {
+    position: absolute;
+    top: 50px;
+    width: 100px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: moveCloud 30s linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+  .cloud::before { left: -30px; top: 0; }
+  .cloud::after { left: 30px; top: -20px; }
+
+  @keyframes moveCloud {
+    0% { transform: translateX(-150px); }
+    100% { transform: translateX(110vw); }
+  }
+
+  /* 树叶晃动 */
+  .tree-leaf {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: green;
+    border-radius: 50%;
+    top: 220px;
+    left: 50px;
+    animation: sway 2s infinite alternate;
+  }
+  @keyframes sway {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(15deg); }
+  }
+
+  /* 雨 */
+  .raindrop {
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    background: #00f;
+    animation: fall 1s linear infinite;
+  }
+  @keyframes fall {
+    0% { top: -10px; opacity: 1; }
+    100% { top: 300px; opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>TourVibe - 模拟景区展示</h1>
+</header>
+
+<section id="map">
+  <!-- 景点 -->
+  <div class="spot" style="top:50px; left:50px;" data-name="景点A">A</div>
+  <div class="spot" style="top:120px; left:200px;" data-name="景点B">B</div>
+  <div class="spot" style="top:200px; left:100px;" data-name="景点C">C</div>
+
+  <!-- 云 -->
+  <div class="cloud" style="top:20px; left:0;"></div>
+  <div class="cloud" style="top:100px; left:-200px;"></div>
+
+  <!-- 树叶 -->
+  <div class="tree-leaf" style="left:100px;"></div>
+  <div class="tree-leaf" style="left:150px;"></div>
+
+  <!-- 雨容器 -->
+  <div id="rain"></div>
+</section>
+
+<section id="info">
+  <h2>景点信息</h2>
+  <p id="spot-info">点击景点查看信息</p>
+</section>
+
+<section id="weather-controls">
+  <button onclick="setWeather('sun')">晴天</button>
+  <button onclick="setWeather('rain')">雨天</button>
+  <button onclick="setTime('day')">白天</button>
+  <button onclick="setTime('night')">夜晚</button>
+</section>
+
+<section id="social">
+  <h2>社交墙（模拟互动）</h2>
+  <input type="text" id="comment-input" placeholder="写下你的留言..." />
+  <button onclick="addComment()">发布</button>
+  <div id="comments"></div>
+</section>
+
+<script>
+  // 景点点击显示信息
+  const spots = document.querySelectorAll('.spot');
+  const spotInfo = document.getElementById('spot-info');
+  spots.forEach(spot => {
+    spot.addEventListener('click', () => {
+      spotInfo.textContent = spot.dataset.name + "：这里展示景点信息和文化背景。";
+    });
+  });
+
+  // 天气和时间模拟
+  const rainContainer = document.getElementById('rain');
+  let rainDrops = [];
+  function createRain() {
+    rainContainer.innerHTML = '';
+    for(let i=0;i<50;i++){
+      const drop = document.createElement('div');
+      drop.className = 'raindrop';
+      drop.style.left = Math.random()*window.innerWidth + 'px';
+      drop.style.animationDuration = 0.5 + Math.random() + 's';
+      rainContainer.appendChild(drop);
+      rainDrops.push(drop);
+    }
+  }
+
+  function setWeather(type) {
+    if(type === 'sun') {
+      document.body.style.background = '#a3d2ff';
+      rainContainer.style.display = 'none';
+    }
+    if(type === 'rain') {
+      document.body.style.background = '#708090';
+      rainContainer.style.display = 'block';
+      createRain();
+    }
+  }
+
+  function setTime(type) {
+    if(type === 'day') document.body.style.background = '#a3d2ff';
+    if(type === 'night') document.body.style.background = '#001f3f';
+  }
+
+  // 模拟社交墙
+  const commentInput = document.getElementById('comment-input');
+  const commentsDiv = document.getElementById('comments');
+  const commentsKey = 'tourvibe-comments';
+
+  function loadComments() {
+    const saved = JSON.parse(localStorage.getItem(commentsKey) || '[]');
+    commentsDiv.innerHTML = '';
+    saved.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'comment';
+      div.textContent = c;
+      commentsDiv.appendChild(div);
+    });
+  }
+
+  function addComment() {
+    const text = commentInput.value.trim();
+    if(!text) return;
+    const saved = JSON.parse(localStorage.getItem(commentsKey) || '[]');
+    saved.push(text);
+    localStorage.setItem(commentsKey, JSON.stringify(saved));
+    commentInput.value = '';
+    loadComments();
+  }
+
+  loadComments();
+</script>
+</body>
+</html>
