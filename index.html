@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>景区社交圈</title>
-    <!-- 已替换你的高德API Key -->
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=389e289d3e4bebdddeda7afad265dd0c"></script>
+    <!-- 用Web端Key加载地图 -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=389e289d3e4fbebddeda7afd265dd0c"></script>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/mdui/1.0.2/css/mdui.min.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/mdui/1.0.2/js/mdui.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <!-- 加载axios用于天气请求 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -16,6 +17,7 @@
         <div class="mdui-toolbar mdui-container">
             <span class="mdui-typo-title">景区社交圈</span>
             <div class="mdui-toolbar-spacer"></div>
+            <!-- 实时时间 + 天气 -->
             <span id="currentTime" class="mdui-typo-body-1 mdui-text-color-white"></span>
             <span id="weatherInfo" class="mdui-typo-body-1 mdui-text-color-white mdui-m-l-2"></span>
             <select id="scenicSelect" class="mdui-select" onchange="switchScenic(this.value)">
